@@ -35,7 +35,8 @@
     @keyframes o2{0%,100%{transform:translate(0,0)}50%{transform:translate(35px,-45px)}}
     @keyframes o3{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
     .grid-overlay{position:fixed;inset:0;z-index:0;pointer-events:none;
-      background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+      background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
       background-size:56px 56px}
 
     /* ── Preview wrapper ── */
@@ -49,7 +50,7 @@
     /* ── Header ── */
     #header{
       position:sticky;top:3px;z-index:500;
-      background:rgba(15,17,23,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      background:rgba(15,17,23,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
       border-bottom:1px solid var(--card-border);
       padding:0 16px;height:54px;
       display:flex;align-items:center;justify-content:space-between
@@ -72,26 +73,78 @@
     .hd-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:pdot 2s ease-in-out infinite}
     @keyframes pdot{0%,100%{opacity:1}50%{opacity:.2}}
 
-    /* ── Hero ── */
-    .hero{padding:28px 16px 20px;max-width:1100px;margin:0 auto}
-    .hero-eyebrow{
-      display:inline-flex;align-items:center;gap:7px;
-      font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-      color:var(--red);margin-bottom:12px
+    /* ── Revenue Goal Section (above the fold) ── */
+    #revenue-section{
+      min-height:calc(100vh - 57px);
+      display:flex;flex-direction:column;justify-content:center;
+      padding:32px 20px 40px;
+      position:relative;z-index:1
     }
-    .hero-eyebrow svg{width:11px;height:11px;fill:var(--red)}
-    .hero h1{font-size:clamp(26px,7vw,48px);font-weight:900;letter-spacing:-1px;line-height:1.1;margin-bottom:10px}
-    .hero h1 em{font-style:normal;color:var(--red)}
-    .hero-sub{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px}
-    /* 2×2 grid on mobile */
-    .hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
-    .stat-chip{display:flex;flex-direction:column}
-    .stat-num{font-size:20px;font-weight:800;letter-spacing:-.5px}
-    .stat-num em{font-style:normal;color:var(--red)}
-    .stat-desc{font-size:10px;color:var(--faint);font-weight:500;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+    .rev-eyebrow{
+      font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+      color:var(--red);margin-bottom:16px;
+      display:flex;align-items:center;gap:7px
+    }
+    .rev-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--red)}
+    .rev-q{
+      font-size:clamp(24px,6.5vw,38px);font-weight:900;letter-spacing:-.8px;
+      line-height:1.15;margin-bottom:28px;color:var(--text)
+    }
+    .rev-q em{font-style:normal;color:var(--red)}
 
-    /* ── Tools — single col on mobile ── */
-    .tools{padding:16px 16px 48px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+    /* Large currency input */
+    .rev-input-wrap{
+      position:relative;margin-bottom:14px
+    }
+    .rev-currency{
+      position:absolute;left:18px;top:50%;transform:translateY(-50%);
+      font-size:26px;font-weight:700;color:var(--faint);pointer-events:none;
+      line-height:1
+    }
+    #revenue-input{
+      width:100%;padding:18px 18px 18px 42px;
+      background:rgba(255,255,255,.07);
+      border:2px solid rgba(255,255,255,.14);
+      border-radius:12px;color:var(--text);
+      font-size:28px;font-weight:800;font-family:inherit;
+      letter-spacing:-.5px;outline:none;
+      transition:border-color .2s,box-shadow .2s;
+      min-height:72px
+    }
+    #revenue-input:focus{
+      border-color:rgba(200,16,46,.6);
+      box-shadow:0 0 0 4px rgba(200,16,46,.08)
+    }
+    #revenue-input::placeholder{color:rgba(255,255,255,.25)}
+
+    .rev-hint{
+      font-size:11px;color:var(--faint);margin-bottom:24px;
+      padding-left:2px;line-height:1.5
+    }
+
+    /* Main CTA button */
+    .rev-btn{
+      width:100%;padding:18px 20px;
+      background:var(--red);color:white;border:none;
+      border-radius:12px;font-size:16px;font-weight:800;font-family:inherit;
+      cursor:pointer;letter-spacing:.1px;
+      box-shadow:0 6px 24px var(--red-glow);
+      transition:transform .15s ease,box-shadow .15s ease;
+      min-height:60px;line-height:1.2
+    }
+    .rev-btn:active{transform:scale(.97);box-shadow:0 3px 12px var(--red-glow)}
+
+    /* Scroll hint */
+    .scroll-hint{
+      display:flex;flex-direction:column;align-items:center;gap:5px;
+      margin-top:28px;opacity:.4
+    }
+    .scroll-hint span{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
+    .scroll-arrow{width:16px;height:16px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);animation:bdwn 1.8s ease-in-out infinite;margin-top:-4px}
+    @keyframes bdwn{0%,100%{transform:rotate(45deg) translateY(0)}55%{transform:rotate(45deg) translateY(4px)}}
+
+    /* ── Tools section (below fold) ── */
+    .tools{padding:0 16px 48px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 
     /* ── Card shell ── */
     .card{
@@ -113,37 +166,30 @@
     .card-sub{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:16px}
     .divider{height:1px;background:var(--card-border);margin:0 0 16px}
 
-    /* ── "Try it" prompt ── */
+    /* "Try it" prompt */
     .try-prompt{
       display:flex;align-items:center;gap:8px;
       font-size:12px;font-weight:600;color:var(--red);
-      margin-bottom:14px;letter-spacing:.2px
+      margin-bottom:13px;letter-spacing:.2px
     }
-    .try-pulse{
-      width:7px;height:7px;flex-shrink:0;border-radius:50%;
-      background:var(--red);animation:pdot 1.4s ease-in-out infinite
-    }
-    .try-arrow{display:inline-block;animation:bdwn 1.7s ease-in-out infinite;font-size:13px}
-    @keyframes bdwn{0%,100%{transform:translateY(0)}55%{transform:translateY(4px)}}
+    .try-pulse{width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--red);animation:pdot 1.4s ease-in-out infinite}
 
     /* ── Pricing card ── */
     .pricing-body{padding:0 18px 18px}
-    /* single col on mobile */
     .field-row{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
     .field{display:flex;flex-direction:column;gap:5px}
     .field label{font-size:11px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.8px}
     .field input,.field select{
-      padding:12px 12px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
+      padding:12px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);
       border-radius:8px;color:var(--text);font-size:15px;font-family:inherit;outline:none;
       transition:border-color var(--ease);appearance:none;-webkit-appearance:none
     }
     .field input:focus,.field select:focus{border-color:rgba(200,16,46,.5)}
     .field select option{background:#1a1d2e;color:var(--text)}
     .analyze-btn{
-      width:100%;padding:15px;background:var(--red);color:white;border:none;
+      width:100%;padding:14px;background:var(--red);color:white;border:none;
       border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;
-      transition:var(--ease);box-shadow:0 4px 18px var(--red-glow);letter-spacing:.2px;
-      min-height:52px
+      transition:var(--ease);box-shadow:0 4px 16px var(--red-glow);letter-spacing:.2px;min-height:50px
     }
     .analyze-btn:active{transform:scale(.97)}
 
@@ -157,7 +203,6 @@
     .results-head-label{font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:6px}
     .results-head-label svg{width:11px;height:11px;fill:var(--green)}
     .results-zip{font-size:11px;color:var(--faint)}
-    /* 2 cols on mobile, 3rd full-width row */
     .metrics-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid rgba(255,255,255,.06)}
     .metric{padding:12px 14px}
     .metric-label{font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px}
@@ -165,10 +210,7 @@
     .metric-value.green{color:var(--green)}
     .metric-value.gold{color:var(--gold)}
     .metric-sub{font-size:10px;color:var(--faint);margin-top:2px}
-    /* opportunity spans full width on mobile */
     .metric-opp{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.06)}
-
-    /* Bar chart */
     .chart-wrap{padding:13px 14px 10px;border-bottom:1px solid rgba(255,255,255,.06)}
     .chart-label{font-size:10px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
     .chart-bars{display:flex;align-items:flex-end;gap:4px;height:64px}
@@ -179,8 +221,6 @@
     .bar-rect.highlight{background:var(--red);box-shadow:0 0 8px var(--red-glow)}
     .bar-rect.dim{background:rgba(255,255,255,.1)}
     .bar-rect.premium{background:var(--gold);box-shadow:0 0 8px rgba(245,158,11,.3)}
-
-    /* Insight */
     .insight{padding:11px 14px;display:flex;align-items:flex-start;gap:9px}
     .insight-icon{width:26px;height:26px;flex-shrink:0;background:rgba(16,185,129,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-top:1px}
     .insight-icon svg{width:13px;height:13px;fill:var(--green)}
@@ -190,7 +230,6 @@
     /* ── Enrollment card ── */
     .enrollment-body{padding:0 18px 18px}
     .objections-label{font-size:11px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
-    /* full-width stacked buttons on mobile */
     .objections{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
     .obj-btn{
       width:100%;padding:13px 16px;border-radius:10px;
@@ -200,14 +239,11 @@
       text-align:left;min-height:48px;line-height:1.3
     }
     .obj-btn:active{background:rgba(200,16,46,.1);border-color:rgba(200,16,46,.35);color:var(--text)}
-    /* pulse the first button to signal interactivity */
-    .obj-btn-first{animation:btnpulse 2.4s ease-in-out 1.5s 3}
+    .obj-btn-first{animation:btnpulse 2.4s ease-in-out 1.8s 3}
     @keyframes btnpulse{
       0%,100%{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--muted)}
       50%{border-color:rgba(200,16,46,.55);background:rgba(200,16,46,.1);color:var(--text)}
     }
-
-    /* Advisor footer */
     .advisor-footer{padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;display:flex;align-items:flex-start;gap:9px}
     .advisor-footer svg{width:13px;height:13px;fill:var(--red);flex-shrink:0;margin-top:2px}
     .advisor-footer p{font-size:11px;color:var(--faint);line-height:1.5}
@@ -215,17 +251,17 @@
     /* ── Lock overlay ── */
     #lock-overlay{
       position:fixed;inset:0;z-index:9000;
-      background:rgba(10,11,20,.85);
+      background:rgba(10,11,20,.87);
       backdrop-filter:blur(28px) saturate(1.4);-webkit-backdrop-filter:blur(28px) saturate(1.4);
       display:flex;align-items:center;justify-content:center;padding:16px;
-      opacity:0;pointer-events:none;transition:opacity .7s ease
+      opacity:0;pointer-events:none;transition:opacity .65s ease
     }
     #lock-overlay.active{opacity:1;pointer-events:all}
     .lock-card{
       background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
       border-radius:20px;padding:32px 20px;max-width:420px;width:100%;text-align:center;
       box-shadow:0 32px 80px rgba(0,0,0,.6);
-      transform:scale(.96) translateY(14px);transition:transform .7s ease
+      transform:scale(.96) translateY(14px);transition:transform .65s ease
     }
     #lock-overlay.active .lock-card{transform:scale(1) translateY(0)}
     .lock-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px}
@@ -240,8 +276,7 @@
       background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);
       border-radius:10px;color:var(--text);font-size:15px;font-family:inherit;
       font-weight:600;letter-spacing:2px;text-align:center;text-transform:uppercase;
-      outline:none;transition:border-color .2s;margin-bottom:10px;
-      min-height:52px
+      outline:none;transition:border-color .2s;margin-bottom:10px;min-height:52px
     }
     .lock-input::placeholder{letter-spacing:1px;font-weight:400;text-transform:none;opacity:.4}
     .lock-input:focus{border-color:rgba(200,16,46,.55)}
@@ -250,8 +285,8 @@
     .lock-btn{
       width:100%;padding:15px;background:var(--red);color:white;border:none;
       border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;
-      cursor:pointer;transition:var(--ease);box-shadow:0 4px 20px var(--red-glow);letter-spacing:.2px;
-      min-height:52px
+      cursor:pointer;box-shadow:0 4px 20px var(--red-glow);letter-spacing:.2px;min-height:52px;
+      transition:transform .15s ease
     }
     .lock-btn:active{transform:scale(.97)}
     .lock-error{font-size:12px;color:#f87171;margin-top:10px;min-height:16px}
@@ -260,7 +295,7 @@
     .lock-hint a:hover{color:var(--text)}
 
     /* ══════════════════════════════════
-       DESKTOP — 768px and up
+       DESKTOP — 768px+
     ══════════════════════════════════ */
     @media(min-width:768px){
       #header{padding:0 32px;height:62px}
@@ -268,39 +303,32 @@
       .hd-logo-icon svg{width:17px;height:17px}
       .hd-wordmark{font-size:19px}
 
-      .hero{padding:52px 32px 40px}
-      .hero h1{font-size:clamp(32px,4.5vw,48px)}
-      .hero-sub{font-size:16px;max-width:540px}
-      /* 4 across on desktop */
-      .hero-stats{display:flex;gap:32px}
-      .stat-num{font-size:22px}
+      #revenue-section{
+        min-height:auto;
+        padding:80px 32px 64px;
+        max-width:600px;margin:0 auto
+      }
+      .rev-q{font-size:clamp(32px,4vw,42px)}
+      #revenue-input{font-size:32px;min-height:80px;padding:20px 20px 20px 48px}
+      .rev-currency{font-size:30px;left:20px}
+      .rev-btn{font-size:17px;min-height:64px}
+      .scroll-hint{display:none}
 
       .tools{padding:0 32px 80px;grid-template-columns:1fr 1fr;gap:20px}
-
       .card-head{padding:24px 24px 0}
       .card-icon{width:42px;height:42px}
       .card-icon svg{width:20px;height:20px}
       .card-title{font-size:18px}
-
       .pricing-body{padding:0 24px 24px}
-      /* 3 cols on desktop */
       .field-row{grid-template-columns:1fr 1fr 1fr}
       .field input,.field select{font-size:13px;padding:10px 12px}
       .analyze-btn{font-size:14px;min-height:44px;padding:12px}
-
-      /* 3-col metrics on desktop */
       .metrics-row{grid-template-columns:1fr 1fr 1fr}
       .metric-opp{grid-column:auto;border-top:none;border-left:1px solid rgba(255,255,255,.06)}
-
       .enrollment-body{padding:0 24px 24px}
-      /* pill layout on desktop */
       .objections{flex-direction:row;flex-wrap:wrap;gap:7px}
-      .obj-btn{
-        width:auto;min-height:36px;padding:8px 14px;
-        border-radius:20px;font-size:12px;border-width:1px
-      }
+      .obj-btn{width:auto;min-height:36px;padding:8px 14px;border-radius:20px;font-size:12px;border-width:1px}
       .obj-btn:hover{border-color:rgba(200,16,46,.35);color:var(--text);background:rgba(200,16,46,.06)}
-
       .lock-card{padding:48px 44px}
       .lock-headline{font-size:22px}
     }
@@ -314,7 +342,6 @@
   <div class="orb orb-3"></div>
 </div>
 <div class="grid-overlay"></div>
-
 <div id="timer-track"><div id="timer-bar"></div></div>
 
 <div id="preview">
@@ -327,40 +354,39 @@
     <div class="hd-badge"><div class="hd-dot"></div>Live Preview</div>
   </header>
 
-  <section class="hero">
-    <div class="hero-eyebrow">
-      <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
-      Martial Arts Growth Intelligence
+  <!-- ── Above the fold: revenue goal ── -->
+  <section id="revenue-section">
+    <div class="rev-eyebrow"><span class="rev-eyebrow-dot"></span>Step 1 of 3</div>
+    <h1 class="rev-q">What's your monthly<br><em>revenue goal?</em></h1>
+    <div class="rev-input-wrap">
+      <span class="rev-currency">$</span>
+      <input type="text" id="revenue-input" placeholder="10,000" inputmode="numeric" autocomplete="off">
     </div>
-    <h1>The Data Your School<br>Needs to <em>Grow Faster</em></h1>
-    <p class="hero-sub">AI-powered pricing analysis, enrollment coaching, and market benchmarks built exclusively for martial arts schools.</p>
-    <div class="hero-stats">
-      <div class="stat-chip"><div class="stat-num"><em>2,400+</em></div><div class="stat-desc">Schools Analyzed</div></div>
-      <div class="stat-chip"><div class="stat-num"><em>47</em></div><div class="stat-desc">Markets Covered</div></div>
-      <div class="stat-chip"><div class="stat-num"><em>6</em></div><div class="stat-desc">Disciplines</div></div>
-      <div class="stat-chip"><div class="stat-num"><em>AI</em></div><div class="stat-desc">Powered Engine</div></div>
+    <p class="rev-hint">Enter the monthly revenue you want your school to hit.</p>
+    <button class="rev-btn" onclick="calcGrowthPlan()">Calculate My Growth Plan →</button>
+    <div class="scroll-hint">
+      <span>More tools below</span>
+      <div class="scroll-arrow"></div>
     </div>
   </section>
 
+  <!-- ── Below the fold: tool cards ── -->
   <div class="tools">
 
     <!-- Pricing Intelligence -->
     <div class="card">
       <div class="card-head">
         <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
-        <div class="card-tag">Pricing Intelligence</div>
+        <div class="card-tag">Step 2 — Pricing Intelligence</div>
         <div class="card-title">Find Your Optimal Rate</div>
         <div class="card-sub">See what top-performing schools in your market actually charge — and where you should be positioned to maximize revenue.</div>
       </div>
       <div class="divider"></div>
       <div class="pricing-body">
-
         <div class="try-prompt">
           <span class="try-pulse"></span>
-          Try it — enter your school's info below
-          <span class="try-arrow">↓</span>
+          Enter your market details below
         </div>
-
         <div class="field-row">
           <div class="field">
             <label>Zip Code</label>
@@ -389,8 +415,6 @@
           </div>
         </div>
         <button class="analyze-btn" id="analyze-btn" onclick="analyzeMarket()">Analyze My Market →</button>
-
-        <!-- Sample results visible as teaser -->
         <div class="results">
           <div class="results-head">
             <div class="results-head-label">
@@ -458,7 +482,7 @@
     <div class="card">
       <div class="card-head">
         <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
-        <div class="card-tag">Enrollment Advisor</div>
+        <div class="card-tag">Step 3 — Enrollment Advisor</div>
         <div class="card-title">Handle Every Objection</div>
         <div class="card-sub">AI-powered responses for your toughest enrollment conversations — proven scripts for every situation.</div>
       </div>
@@ -509,14 +533,28 @@ if(sessionStorage.getItem('dojoiq_auth')){
   return;
 }
 
-/* ── Timer (30s fallback) ── */
+/* ── Timer — starts on first input interaction ── */
 var bar = document.getElementById('timer-bar');
 var locked = false;
-setTimeout(function(){ bar.classList.add('running'); }, 50);
-var lockTimer = setTimeout(function(){ lockPage('timer'); }, 30000);
+var timerStarted = false;
+var lockTimer = null;
 
-/* ── Lock messages per trigger ── */
+function startTimer(){
+  if(timerStarted || locked) return;
+  timerStarted = true;
+  bar.classList.add('running');
+  lockTimer = setTimeout(function(){ lockPage('timer'); }, 30000);
+}
+
+/* Wire up ALL inputs and selects to start the timer on first touch */
+document.querySelectorAll('input, select').forEach(function(el){
+  el.addEventListener('focus', startTimer);
+  el.addEventListener('input', startTimer);
+});
+
+/* ── Lock messages ── */
 var lockSubs = {
+  growth:     'Your personalized growth plan is ready — enter your session code to unlock it.',
   pricing:    'Unlock full results with your session code.',
   enrollment: 'Unlock the full response library with your session code.',
   timer:      'Enter the access code from your DojoIQ session to see your market analysis and unlock the full enrollment response library.'
@@ -525,7 +563,7 @@ var lockSubs = {
 function lockPage(trigger){
   if(locked) return;
   locked = true;
-  clearTimeout(lockTimer);
+  if(lockTimer) clearTimeout(lockTimer);
   document.getElementById('preview').classList.add('blurred');
   document.body.style.overflow = 'hidden';
   document.getElementById('lock-sub').textContent = lockSubs[trigger] || lockSubs.timer;
@@ -557,12 +595,17 @@ document.getElementById('lock-input').addEventListener('keydown', function(e){
   if(e.key === 'Enter') window.unlock();
 });
 
-/* ── Pricing button → immediate lock ── */
+/* ── Revenue goal → immediate lock ── */
+window.calcGrowthPlan = function(){
+  lockPage('growth');
+};
+
+/* ── Pricing → immediate lock ── */
 window.analyzeMarket = function(){
   lockPage('pricing');
 };
 
-/* ── Enrollment buttons → immediate lock ── */
+/* ── Enrollment → immediate lock ── */
 window.showResponse = function(){
   lockPage('enrollment');
 };
