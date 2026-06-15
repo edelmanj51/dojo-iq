@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DojoIQ Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:         #C8102E;
+      --red-dark:    #a00d24;
+      --red-glow:    rgba(200,16,46,.35);
+      --navy:        #07091a;
+      --navy-2:      #0d1024;
+      --glass-bg:    rgba(255,255,255,.055);
+      --glass-border:rgba(255,255,255,.10);
+      --text:        #f0f2ff;
+      --muted:       rgba(240,242,255,.55);
+      --radius:      14px;
+      --transition:  all .22s ease;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background ── */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+    .bg-orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .14; }
+    .bg-orb-1 { width: 700px; height: 700px; background: var(--red); top: -250px; right: -200px; animation: drift1 20s ease-in-out infinite; }
+    .bg-orb-2 { width: 500px; height: 500px; background: #1a2a6e; bottom: -150px; left: -100px; animation: drift2 24s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,40px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-50px)} }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── Header ── */
+    #header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(7,9,26,.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 32px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--red);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 16px var(--red-glow);
+    }
+    .logo-icon svg { width: 18px; height: 18px; fill: white; }
+    .logo-wordmark { font-size: 20px; font-weight: 800; letter-spacing: -.4px; color: var(--text); }
+    .logo-wordmark span { color: var(--red); }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .badge-live {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(200,16,46,.12); border: 1px solid rgba(200,16,46,.25);
+      padding: 5px 12px; border-radius: 20px;
+      font-size: 11px; font-weight: 600; color: #ff8095; letter-spacing: .5px;
+    }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .logout-btn {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      color: var(--muted); font-size: 13px; font-weight: 500; font-family: inherit;
+      padding: 8px 14px; border-radius: 8px; cursor: pointer;
+      transition: var(--transition);
+    }
+    .logout-btn:hover { border-color: rgba(200,16,46,.4); color: var(--text); }
+    .logout-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+    /* ── Main layout ── */
+    .main {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto;
+      padding: 100px 32px 80px;
+    }
+
+    /* ── Welcome band ── */
+    .welcome-band {
+      margin-bottom: 52px;
+      opacity: 0; animation: fadeUp .6s ease .1s forwards;
+    }
+    .welcome-eyebrow {
+      font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--red); margin-bottom: 10px;
+    }
+    .welcome-headline {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 900;
+      letter-spacing: -.8px; line-height: 1.15; margin-bottom: 10px;
+    }
+    .welcome-sub { font-size: 16px; color: var(--muted); max-width: 580px; line-height: 1.65; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: flex; gap: 1px; background: var(--glass-border);
+      border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--glass-border); margin-bottom: 52px;
+      opacity: 0; animation: fadeUp .6s ease .2s forwards;
+    }
+    .stat-item {
+      flex: 1; padding: 20px 24px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    .stat-label { font-size: 11px; color: var(--muted); font-weight: 500; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 6px; }
+    .stat-value { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+    .stat-value em { font-style: normal; color: var(--red); }
+
+    /* ── Section heading ── */
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+      opacity: 0; animation: fadeUp .6s ease .25s forwards;
+    }
+
+    /* ── Tool grid ── */
+    .tools-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px; margin-bottom: 48px;
+    }
+    .tool-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 18px; padding: 32px 28px;
+      display: flex; flex-direction: column; gap: 0;
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      opacity: 0; animation: fadeUp .6s ease var(--delay) forwards;
+    }
+    .tool-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .tool-card:hover { border-color: rgba(200,16,46,.25); transform: translateY(-3px); box-shadow: 0 20px 48px rgba(0,0,0,.35); }
+    .tool-card:hover::before { opacity: 1; }
+
+    .tool-icon-wrap {
+      width: 48px; height: 48px;
+      background: rgba(200,16,46,.12); border: 1px solid rgba(200,16,46,.2);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; transition: var(--transition);
+    }
+    .tool-card:hover .tool-icon-wrap { background: rgba(200,16,46,.2); }
+    .tool-icon-wrap svg { width: 22px; height: 22px; fill: var(--red); }
+
+    .tool-number {
+      position: absolute; top: 24px; right: 24px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      color: rgba(255,255,255,.12); text-transform: uppercase;
+    }
+    .tool-title { font-size: 19px; font-weight: 800; margin-bottom: 10px; letter-spacing: -.3px; }
+    .tool-desc { font-size: 14px; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 28px; }
+
+    .tool-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tool-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: .5px;
+      padding: 4px 10px; border-radius: 20px;
+      background: rgba(200,16,46,.12); color: #ff8095; border: 1px solid rgba(200,16,46,.2);
+    }
+
+    .tool-btn {
+      width: 100%; padding: 13px;
+      background: var(--red); color: white; border: none;
+      border-radius: 10px; font-size: 14px; font-weight: 700;
+      font-family: inherit; cursor: pointer; transition: var(--transition);
+      box-shadow: 0 4px 16px var(--red-glow);
+    }
+    .tool-btn:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: 0 8px 24px var(--red-glow); }
+
+    /* ── Coming soon note ── */
+    .coming-note {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.03); border: 1px solid var(--glass-border);
+      border-radius: var(--radius); padding: 20px 24px;
+      opacity: 0; animation: fadeUp .6s ease .65s forwards;
+    }
+    .coming-note svg { width: 18px; height: 18px; fill: var(--red); flex-shrink: 0; }
+    .coming-note p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .coming-note strong { color: var(--text); }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity .3s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: #0f1228;
+      border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 44px 40px;
+      max-width: 460px; width: 100%; text-align: center;
+      transform: scale(.94) translateY(16px);
+      transition: transform .3s ease;
+      position: relative;
+    }
+    .modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      color: var(--muted); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition); font-family: inherit;
+    }
+    .modal-close:hover { background: rgba(200,16,46,.15); color: var(--text); border-color: rgba(200,16,46,.3); }
+    .modal-icon-wrap {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: rgba(200,16,46,.12); border: 1px solid rgba(200,16,46,.25);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .modal-icon-wrap svg { width: 26px; height: 26px; fill: var(--red); }
+    .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -.4px; }
+    .modal-tool-name { font-size: 14px; color: var(--red); font-weight: 600; margin-bottom: 20px; }
+    .modal-body { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+    .modal-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(200,16,46,.1); border: 1px solid rgba(200,16,46,.2);
+      padding: 8px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; color: #ff8095;
+    }
+    .modal-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse 2s ease-in-out infinite; }
+    .modal-dismiss {
+      width: 100%; padding: 13px; margin-top: 18px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      color: var(--text); font-size: 14px; font-weight: 600; font-family: inherit;
+      border-radius: 10px; cursor: pointer; transition: var(--transition);
+    }
+    .modal-dismiss:hover { border-color: rgba(200,16,46,.4); background: rgba(200,16,46,.08); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      .main { padding: 88px 20px 60px; }
+      .stats-bar { flex-direction: column; gap: 0; }
+      .stat-item { border-bottom: 1px solid var(--glass-border); }
+      .stat-item:last-child { border-bottom: none; }
+      #header { padding: 0 16px; }
+      .badge-live { display: none; }
+      .modal-box { padding: 32px 24px; }
+    }
+    @media (max-width: 480px) {
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-layer">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+</div>
+<div class="bg-grid"></div>
+
+<!-- Header -->
+<header id="header">
+  <a href="index.html" class="header-logo" aria-label="DojoIQ Home">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2zm-1 13l-3-3 1.41-1.41L11 12.17l4.59-4.58L17 9l-6 6z"/></svg>
+    </div>
+    <div class="logo-wordmark">Dojo<span>IQ</span></div>
+  </a>
+  <div class="header-right">
+    <div class="badge-live"><div class="badge-dot"></div>BETA ACCESS</div>
+    <button class="logout-btn" onclick="logout()" aria-label="Lock and return to login">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      Lock
+    </button>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- Welcome -->
+  <div class="welcome-band">
+    <p class="welcome-eyebrow">DojoIQ Dashboard</p>
+    <h1 class="welcome-headline">Welcome to DojoIQ —<br>your school growth toolkit is ready.</h1>
+    <p class="welcome-sub">Three AI-powered tools built exclusively for martial arts school owners. Select a tool below to get started.</p>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-label">Tools Available</div>
+      <div class="stat-value"><em>3</em> Modules</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Access Level</div>
+      <div class="stat-value"><em>Full</em> Beta</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Powered By</div>
+      <div class="stat-value"><em>AI</em> Engine</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Market Focus</div>
+      <div class="stat-value"><em>Martial</em> Arts</div>
+    </div>
+  </div>
+
+  <!-- Tools -->
+  <p class="section-label">Your Tools</p>
+  <div class="tools-grid">
+
+    <!-- Card 1 — Pricing Intelligence -->
+    <div class="tool-card" style="--delay:.3s">
+      <div class="tool-number">01</div>
+      <div class="tool-icon-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+      </div>
+      <div class="tool-title">Pricing Intelligence</div>
+      <div class="tool-desc">Enter your zip code, martial art, and class frequency to see what top schools in your market charge — and what rate maximizes your revenue per student.</div>
+      <div class="tool-meta">
+        <span class="tool-tag">AI-Powered</span>
+      </div>
+      <button class="tool-btn" onclick="openModal('Pricing Intelligence')">Launch Tool →</button>
+    </div>
+
+    <!-- Card 2 — Enrollment Advisor -->
+    <div class="tool-card" style="--delay:.4s">
+      <div class="tool-number">02</div>
+      <div class="tool-icon-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+      </div>
+      <div class="tool-title">Enrollment Advisor</div>
+      <div class="tool-desc">Describe any enrollment situation and get an instant AI-powered response — from handling price objections to structuring your trial class pitch and closing the sale.</div>
+      <div class="tool-meta">
+        <span class="tool-tag">AI Chat</span>
+      </div>
+      <button class="tool-btn" onclick="openModal('Enrollment Advisor')">Launch Tool →</button>
+    </div>
+
+    <!-- Card 3 — Growth Benchmarks -->
+    <div class="tool-card" style="--delay:.5s">
+      <div class="tool-number">03</div>
+      <div class="tool-icon-wrap">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+      </div>
+      <div class="tool-title">Growth Benchmarks</div>
+      <div class="tool-desc">See how your school's lead volume, show rate, and conversion rate compares to top-performing schools in your area. Know exactly where you stand and where to improve.</div>
+      <div class="tool-meta">
+        <span class="tool-tag">Analytics</span>
+      </div>
+      <button class="tool-btn" onclick="openModal('Growth Benchmarks')">Launch Tool →</button>
+    </div>
+
+  </div>
+
+  <!-- Coming soon note -->
+  <div class="coming-note">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+    <p><strong>Tools are currently in beta.</strong> Your access code will work automatically when each tool launches — no action needed. New tools activate as they go live.</p>
+  </div>
+
+</main>
+
+<!-- Coming Soon Modal -->
+<div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="closeOnOverlay(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <div class="modal-icon-wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+    </div>
+    <h2 class="modal-title" id="modal-title">Coming Soon</h2>
+    <p class="modal-tool-name" id="modal-tool-name"></p>
+    <p class="modal-body">This tool is currently in beta. Your access code will work automatically when it launches. Check back soon — we're building fast.</p>
+    <div class="modal-tag"><div class="modal-tag-dot"></div>In Development</div>
+    <button class="modal-dismiss" onclick="closeModal()">Got It</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  /* ── Auth guard ── */
+  if (!sessionStorage.getItem('dojoiq_auth')) {
+    window.location.replace('index.html');
+  }
+
+  window.logout = function () {
+    sessionStorage.removeItem('dojoiq_auth');
+    window.location.href = 'index.html';
+  };
+
+  /* ── Modal ── */
+  var modal = document.getElementById('modal');
+  var toolNameEl = document.getElementById('modal-tool-name');
+
+  window.openModal = function (toolName) {
+    toolNameEl.textContent = toolName;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeModal = function () {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.closeOnOverlay = function (e) {
+    if (e.target === modal) closeModal();
+  };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
+  });
+}());
+</script>
+</body>
+</html>
