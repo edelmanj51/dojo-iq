@@ -73,78 +73,8 @@
     .hd-dot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:pdot 2s ease-in-out infinite}
     @keyframes pdot{0%,100%{opacity:1}50%{opacity:.2}}
 
-    /* ── Revenue Goal Section (above the fold) ── */
-    #revenue-section{
-      min-height:calc(100vh - 57px);
-      display:flex;flex-direction:column;justify-content:center;
-      padding:32px 20px 40px;
-      position:relative;z-index:1
-    }
-    .rev-eyebrow{
-      font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-      color:var(--red);margin-bottom:16px;
-      display:flex;align-items:center;gap:7px
-    }
-    .rev-eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--red)}
-    .rev-q{
-      font-size:clamp(24px,6.5vw,38px);font-weight:900;letter-spacing:-.8px;
-      line-height:1.15;margin-bottom:28px;color:var(--text)
-    }
-    .rev-q em{font-style:normal;color:var(--red)}
-
-    /* Large currency input */
-    .rev-input-wrap{
-      position:relative;margin-bottom:14px
-    }
-    .rev-currency{
-      position:absolute;left:18px;top:50%;transform:translateY(-50%);
-      font-size:26px;font-weight:700;color:var(--faint);pointer-events:none;
-      line-height:1
-    }
-    #revenue-input{
-      width:100%;padding:18px 18px 18px 42px;
-      background:rgba(255,255,255,.07);
-      border:2px solid rgba(255,255,255,.14);
-      border-radius:12px;color:var(--text);
-      font-size:28px;font-weight:800;font-family:inherit;
-      letter-spacing:-.5px;outline:none;
-      transition:border-color .2s,box-shadow .2s;
-      min-height:72px
-    }
-    #revenue-input:focus{
-      border-color:rgba(200,16,46,.6);
-      box-shadow:0 0 0 4px rgba(200,16,46,.08)
-    }
-    #revenue-input::placeholder{color:rgba(255,255,255,.25)}
-
-    .rev-hint{
-      font-size:11px;color:var(--faint);margin-bottom:24px;
-      padding-left:2px;line-height:1.5
-    }
-
-    /* Main CTA button */
-    .rev-btn{
-      width:100%;padding:18px 20px;
-      background:var(--red);color:white;border:none;
-      border-radius:12px;font-size:16px;font-weight:800;font-family:inherit;
-      cursor:pointer;letter-spacing:.1px;
-      box-shadow:0 6px 24px var(--red-glow);
-      transition:transform .15s ease,box-shadow .15s ease;
-      min-height:60px;line-height:1.2
-    }
-    .rev-btn:active{transform:scale(.97);box-shadow:0 3px 12px var(--red-glow)}
-
-    /* Scroll hint */
-    .scroll-hint{
-      display:flex;flex-direction:column;align-items:center;gap:5px;
-      margin-top:28px;opacity:.4
-    }
-    .scroll-hint span{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint)}
-    .scroll-arrow{width:16px;height:16px;border-right:2px solid var(--faint);border-bottom:2px solid var(--faint);transform:rotate(45deg);animation:bdwn 1.8s ease-in-out infinite;margin-top:-4px}
-    @keyframes bdwn{0%,100%{transform:rotate(45deg) translateY(0)}55%{transform:rotate(45deg) translateY(4px)}}
-
-    /* ── Tools section (below fold) ── */
-    .tools{padding:0 16px 48px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+    /* ── Tools section ── */
+    .tools{padding:20px 16px 48px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
 
     /* ── Card shell ── */
     .card{
@@ -303,18 +233,7 @@
       .hd-logo-icon svg{width:17px;height:17px}
       .hd-wordmark{font-size:19px}
 
-      #revenue-section{
-        min-height:auto;
-        padding:80px 32px 64px;
-        max-width:600px;margin:0 auto
-      }
-      .rev-q{font-size:clamp(32px,4vw,42px)}
-      #revenue-input{font-size:32px;min-height:80px;padding:20px 20px 20px 48px}
-      .rev-currency{font-size:30px;left:20px}
-      .rev-btn{font-size:17px;min-height:64px}
-      .scroll-hint{display:none}
-
-      .tools{padding:0 32px 80px;grid-template-columns:1fr 1fr;gap:20px}
+      .tools{padding:24px 32px 80px;grid-template-columns:1fr 1fr;gap:20px}
       .card-head{padding:24px 24px 0}
       .card-icon{width:42px;height:42px}
       .card-icon svg{width:20px;height:20px}
@@ -354,30 +273,14 @@
     <div class="hd-badge"><div class="hd-dot"></div>Live Preview</div>
   </header>
 
-  <!-- ── Above the fold: revenue goal ── -->
-  <section id="revenue-section">
-    <div class="rev-eyebrow"><span class="rev-eyebrow-dot"></span>Step 1 of 3</div>
-    <h1 class="rev-q">What's your monthly<br><em>revenue goal?</em></h1>
-    <div class="rev-input-wrap">
-      <span class="rev-currency">$</span>
-      <input type="text" id="revenue-input" placeholder="10,000" inputmode="numeric" autocomplete="off">
-    </div>
-    <p class="rev-hint">Enter the monthly revenue you want your school to hit.</p>
-    <button class="rev-btn" onclick="calcGrowthPlan()">Calculate My Growth Plan →</button>
-    <div class="scroll-hint">
-      <span>More tools below</span>
-      <div class="scroll-arrow"></div>
-    </div>
-  </section>
-
-  <!-- ── Below the fold: tool cards ── -->
+  <!-- ── Tool cards ── -->
   <div class="tools">
 
     <!-- Pricing Intelligence -->
     <div class="card">
       <div class="card-head">
         <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
-        <div class="card-tag">Step 2 — Pricing Intelligence</div>
+        <div class="card-tag">Step 1 — Pricing Intelligence</div>
         <div class="card-title">Find Your Optimal Rate</div>
         <div class="card-sub">See what top-performing schools in your market actually charge — and where you should be positioned to maximize revenue.</div>
       </div>
@@ -482,7 +385,7 @@
     <div class="card">
       <div class="card-head">
         <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
-        <div class="card-tag">Step 3 — Enrollment Advisor</div>
+        <div class="card-tag">Step 2 — Enrollment Advisor</div>
         <div class="card-title">Handle Every Objection</div>
         <div class="card-sub">AI-powered responses for your toughest enrollment conversations — proven scripts for every situation.</div>
       </div>
@@ -554,7 +457,6 @@ document.querySelectorAll('input, select').forEach(function(el){
 
 /* ── Lock messages ── */
 var lockSubs = {
-  growth:     'Your personalized growth plan is ready — enter your session code to unlock it.',
   pricing:    'Unlock full results with your session code.',
   enrollment: 'Unlock the full response library with your session code.',
   timer:      'Enter the access code from your DojoIQ session to see your market analysis and unlock the full enrollment response library.'
@@ -594,11 +496,6 @@ window.unlock = function(){
 document.getElementById('lock-input').addEventListener('keydown', function(e){
   if(e.key === 'Enter') window.unlock();
 });
-
-/* ── Revenue goal → immediate lock ── */
-window.calcGrowthPlan = function(){
-  lockPage('growth');
-};
 
 /* ── Pricing → immediate lock ── */
 window.analyzeMarket = function(){
